@@ -1,17 +1,19 @@
-
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import ImageTrail from "@/components/ui/image-trail";
+import { LoginTrailElements } from "@/components/ui/login-images";
 
 const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   const { register, handleSubmit, formState: { errors } } = useForm();
   
@@ -51,8 +53,26 @@ const Login = () => {
   };
   
   return (
-    <div className="min-h-screen flex items-center justify-center bg-projector-ivory">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-lg p-8 border border-black">
+    <div className="min-h-screen flex items-center justify-center bg-projector-ivory overflow-hidden relative" ref={containerRef}>
+      {/* Image Trail Effect */}
+      <ImageTrail
+        containerRef={containerRef}
+        interval={150}
+        rotationRange={30}
+        animationSequence={[
+          [{ scale: 1.2, opacity: 0.8 }, { duration: 0.2, ease: "circOut" }],
+          [{ scale: 0, opacity: 0 }, { duration: 0.7, ease: "circIn" }],
+        ]}
+      >
+        <LoginTrailElements />
+      </ImageTrail>
+      
+      {/* Background decorative elements */}
+      <div className="absolute top-[-10%] right-[-5%] w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+      <div className="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+      
+      <div className="w-full max-w-md bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg p-8 border border-black/5 z-10">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold mb-4 text-projector-darkblue">
             {isSignUp ? "Create an Account" : "Welcome Back"}
@@ -67,7 +87,7 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {isSignUp && (
             <div className="space-y-2">
-              <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2">
+              <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 transition-all hover:bg-gray-200">
                 <User className="text-gray-500 mr-3" size={20} />
                 <Input 
                   id="name"
@@ -83,7 +103,7 @@ const Login = () => {
           )}
           
           <div className="space-y-2">
-            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2">
+            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 transition-all hover:bg-gray-200">
               <Mail className="text-gray-500 mr-3" size={20} />
               <Input 
                 id="email"
@@ -105,7 +125,7 @@ const Login = () => {
           </div>
           
           <div className="space-y-2">
-            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2">
+            <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 transition-all hover:bg-gray-200">
               <Lock className="text-gray-500 mr-3" size={20} />
               <Input 
                 id="password"
@@ -135,7 +155,7 @@ const Login = () => {
           
           {isSignUp && (
             <div className="space-y-2">
-              <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2">
+              <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 transition-all hover:bg-gray-200">
                 <Lock className="text-gray-500 mr-3" size={20} />
                 <Input 
                   id="confirmPassword"
